@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react'
 import Papa from 'papaparse'
 import './Main.css'
+import FileUploadUI from './FileUploadUI'
 
 const FileUpload: React.FC = () => {
   const [file, setFile] = useState<File | null>(null)
@@ -133,75 +134,27 @@ const FileUpload: React.FC = () => {
   }
 
   return (
-    <div>
-      <input type="file" accept=".csv" onChange={handleFileChange} />
-      {file && !error && !uploadInProgress && <p className="uploadFile">{file.name} file has been uploaded.</p>}
-      {error && <p className="error">{error}</p>}
-      {uploadInProgress && <p>Upload file in progress...</p>}
-      {uploadInProgress && <button onClick={handleCancelUpload}>Cancel Upload</button>}
-
-      {tableData.length > 0 && (
-        <>
-          <div className="search-container">
-            <select value={searchMode} onChange={handleSearchModeChange}>
-              <option value="all">Search All</option>
-              <option value="selected">Search By</option>
-            </select>
-            {searchMode === 'selected' && (
-              <select value={selectedHeader} onChange={handleSelectHeader}>
-                {headers.map((header, index) => (
-                  <option key={index} value={header}>
-                    {header}
-                  </option>
-                ))}
-              </select>
-            )}
-            <input
-              type="text"
-              placeholder="Search..."
-              value={searchQuery}
-              onChange={handleSearchQueryChange}
-              disabled={searchMode === 'selected' && !selectedHeader}
-            />
-          </div>
-
-          {filteredData.length === 0 ? (
-            <p className="no-result">No record found</p>
-          ) : (
-            <>
-              <table>
-                <thead>
-                  <tr>
-                    {headers.map((header, index) => (
-                      <th key={index}>{header}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {currentRows.map((row, rowIndex) => (
-                    <tr key={indexOfFirstRow + rowIndex}>
-                      {row.map((cell, cellIndex) => (
-                        <td key={cellIndex}>{highlightText(cell, searchQuery)}</td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-
-              <div className="pagination">
-                <button onClick={handlePrevPage} disabled={currentPage === 1}>
-                  Previous
-                </button>
-                <span>Page {currentPage} of {totalPages}</span>
-                <button onClick={handleNextPage} disabled={currentPage === totalPages}>
-                  Next
-                </button>
-              </div>
-            </>
-          )}
-        </>
-      )}
-    </div>
+    <FileUploadUI
+      file={file}
+      error={error}
+      uploadInProgress={uploadInProgress}
+      tableData={tableData}
+      headers={headers}
+      currentRows={currentRows}
+      searchMode={searchMode}
+      selectedHeader={selectedHeader}
+      searchQuery={searchQuery}
+      totalPages={totalPages}
+      currentPage={currentPage}
+      handleFileChange={handleFileChange}
+      handleCancelUpload={handleCancelUpload}
+      handleSearchModeChange={handleSearchModeChange}
+      handleSelectHeader={handleSelectHeader}
+      handleSearchQueryChange={handleSearchQueryChange}
+      handlePrevPage={handlePrevPage}
+      handleNextPage={handleNextPage}
+      highlightText={highlightText}
+    />
   )
 }
 
