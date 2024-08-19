@@ -1,6 +1,6 @@
 import React from 'react'
 
-interface FileUploadUIProps {
+export interface FileUploadUIProps {
   file: File | null
   error: string
   uploadInProgress: boolean
@@ -19,7 +19,7 @@ interface FileUploadUIProps {
   handleSearchQueryChange: (event: React.ChangeEvent<HTMLInputElement>) => void
   handlePrevPage: () => void
   handleNextPage: () => void
-  highlightText: (text: string, query: string) => React.ReactNode
+  highlightText: (text: string, query: string) => React.ReactNode;
 }
 
 const FileUploadUI: React.FC<FileUploadUIProps> = ({
